@@ -1,4 +1,6 @@
-import React from 'react';
+"use client";
+
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, useTheme } from '@mui/styles';
 import Typography from '@mui/material/Typography';
@@ -184,6 +186,20 @@ class DwvComponent extends React.Component {
         );
     }
 
+    // In the componentDidUpdate method, we need to reset the display before loading a new file
+    componentDidUpdate(prevProps) {
+        // Check if fileToLoad prop has changed
+        if (this.props.fileToLoad &&
+            (!prevProps.fileToLoad ||
+                this.props.fileToLoad !== prevProps.fileToLoad)) {
+            // Clear the current view before loading a new file
+            if (this.state.dwvApp) {
+                this.state.dwvApp.loadFiles([this.props.fileToLoad]);
+                // this.state.dwvApp.reset();
+            }
+        }
+    }
+
     componentDidMount() {
         // create app
         const app = new App();
@@ -263,11 +279,18 @@ class DwvComponent extends React.Component {
         // store
         this.setState({ dwvApp: app });
 
-        // setup drop box
-        this.setupDropbox(app);
+        // setup drop box if not hidden
+        if (!this.props.hideDropbox) {
+            this.setupDropbox(app);
+        }
 
-        // possible load from location
-        app.loadFromUri(window.location.href);
+        // load file if provided
+        if (this.props.fileToLoad) {
+            app.loadFiles([this.props.fileToLoad]);
+        } else {
+            // possible load from location
+            app.loadFromUri(window.location.href);
+        }
     }
 
     /**
@@ -458,6 +481,10 @@ class DwvComponent extends React.Component {
      * @param show True to show the drop box.
      */
     showDropbox = (app, show) => {
+        // If hideDropbox prop is true, never show the dropbox
+        if (this.props.hideDropbox) {
+            return;
+        }
         const box = document.getElementById(this.state.dropboxDivId);
         if (!box) {
             return;
@@ -525,8 +552,15 @@ class DwvComponent extends React.Component {
 
 } // DwvComponent
 
+// Add these lines to the constructor props validation at the bottom of the file
 DwvComponent.propTypes = {
     classes: PropTypes.object.isRequired,
+    fileToLoad: PropTypes.object,
+    hideDropbox: PropTypes.bool
+};
+
+DwvComponent.defaultProps = {
+    hideDropbox: false
 };
 
 export default withStyles(styles)(DwvComponent);
