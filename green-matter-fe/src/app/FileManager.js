@@ -51,7 +51,7 @@ const FileManager = () => {
           onChange={handleFileUpload}
         />
         <button
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded flex items-center"
+          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded flex items-center"
           onClick={() => fileInputRef.current.click()}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
