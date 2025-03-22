@@ -6,7 +6,6 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { indigo, pink } from '@mui/material/colors';
 
 import './App.css';
-import FileManager from "./FileManager";
 
 export default function Main() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -36,8 +35,9 @@ export default function Main() {
 }
 
 
+
 import { useState } from "react"
-import { Home, FileText, Info } from "lucide-react"
+import { Home, FileText, Info, Users } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 import {
@@ -48,6 +48,9 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+
+import FileManager from "./file-manager"
+import TeamPage from "./team-page"
 
 function GreenMatter() {
   const [selectedPage, setSelectedPage] = useState("home")
@@ -86,6 +89,18 @@ function GreenMatter() {
                 <NavigationMenuLink
                   className={cn(
                     navigationMenuTriggerStyle(),
+                    selectedPage === "team" && "bg-accent text-accent-foreground",
+                  )}
+                  onClick={() => setSelectedPage("team")}
+                >
+                  <Users className="mr-2 h-4 w-4" />
+                  Team
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  className={cn(
+                    navigationMenuTriggerStyle(),
                     selectedPage === "about" && "bg-accent text-accent-foreground",
                   )}
                   onClick={() => setSelectedPage("about")}
@@ -101,6 +116,8 @@ function GreenMatter() {
       <main className="flex-1 container py-6">
         {selectedPage === "viewer" ? (
           <FileManager />
+        ) : selectedPage === "team" ? (
+          <TeamPage />
         ) : selectedPage === "home" ? (
           <Card>
             <CardHeader>
