@@ -5,6 +5,7 @@ const FileManager = () => {
   const [files, setFiles] = useState([]);
   const [selectedFileIndex, setSelectedFileIndex] = useState(null);
   const fileInputRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleFileUpload = (event) => {
     if (event.target.files.length > 0) {
@@ -39,30 +40,66 @@ const FileManager = () => {
     else return (bytes / 1048576).toFixed(2) + ' MB';
   };
 
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    if (e.dataTransfer.files.length > 0) {
+      const newFiles = Array.from(e.dataTransfer.files).map(file => ({
+        file,
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        lastModified: file.lastModified
+      }));
+
+      setFiles(prevFiles => [...prevFiles, ...newFiles]);
+    }
+  };
+
   return (
     <div className="flex flex-col h-full">
       <div className="flex p-4 border-b border-gray-200">
         <h2 className="text-xl font-semibold flex-grow">File Manager</h2>
-        <input
-          type="file"
-          multiple
-          ref={fileInputRef}
-          className="hidden"
-          onChange={handleFileUpload}
-        />
-        <button
-          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded flex items-center"
-          onClick={() => fileInputRef.current.click()}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-          </svg>
-          Add Files
-        </button>
       </div>
 
       <div className="flex h-[calc(100%-4rem)]">
-        <div className="w-72 overflow-auto border-r border-gray-200 bg-gray-50">
+        <div
+          className={`w-72 overflow-auto border-r border-gray-200 bg-gray-50 flex flex-col ${isDragging ? 'bg-blue-50' : ''
+            }`}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
+          <div className="p-4">
+            <input
+              type="file"
+              multiple
+              ref={fileInputRef}
+              className="hidden"
+              onChange={handleFileUpload}
+            />
+            <button
+              className="w-full bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded flex items-center justify-center"
+              onClick={() => fileInputRef.current.click()}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+              </svg>
+              Add Files
+            </button>
+          </div>
+
           {files.length > 0 ? (
             <ul className="divide-y divide-gray-200">
               {files.map((file, index) => (
@@ -96,7 +133,7 @@ const FileManager = () => {
           ) : (
             <div className="p-6 text-center">
               <p className="text-gray-500">
-                No files uploaded. Click "Add Files" to upload.
+                Drop files here or click "Add Files" to upload.
               </p>
             </div>
           )}
