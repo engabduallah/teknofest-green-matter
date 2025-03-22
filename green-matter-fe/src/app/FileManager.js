@@ -102,7 +102,7 @@ const FileManager = () => {
           )}
         </div>
 
-        <div className="flex-grow overflow-auto p-4">
+        <div className="flex-grow overflow-auto p-4 h-[600px]">
           {selectedFileIndex !== null ? (
             <DwvComponent
               key={'dwvcomp' + selectedFileIndex}
