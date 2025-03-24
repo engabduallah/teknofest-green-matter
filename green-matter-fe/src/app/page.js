@@ -4,6 +4,19 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { indigo, pink } from '@mui/material/colors';
+import { useState } from "react"
+import { FileText, Users, Activity } from "lucide-react"
+import { cn } from "@/lib/utils"
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu"
+import FileManager from "./file-manager"
+import TeamPage from "./team-page"
+import PredictPage from "./predict-page"
 
 import './App.css';
 
@@ -24,8 +37,6 @@ export default function Main() {
     }
   });
 
-  const [selectedPage, setSelectedPage] = React.useState('home');
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -36,21 +47,6 @@ export default function Main() {
 
 
 
-import { useState } from "react"
-import { Home, FileText, Info, Users } from "lucide-react"
-import { cn } from "@/lib/utils"
-
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-
-import FileManager from "./file-manager"
-import TeamPage from "./team-page"
 
 function GreenMatter() {
   const [selectedPage, setSelectedPage] = useState("home")
@@ -61,18 +57,6 @@ function GreenMatter() {
         <div className="container flex h-16 items-center">
           <NavigationMenu>
             <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  className={cn(
-                    navigationMenuTriggerStyle(),
-                    selectedPage === "home" && "bg-accent text-accent-foreground",
-                  )}
-                  onClick={() => setSelectedPage("home")}
-                >
-                  <Home className="mr-2 h-4 w-4" />
-                  Home
-                </NavigationMenuLink>
-              </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuLink
                   className={cn(
@@ -89,6 +73,18 @@ function GreenMatter() {
                 <NavigationMenuLink
                   className={cn(
                     navigationMenuTriggerStyle(),
+                    selectedPage === "predict" && "bg-accent text-accent-foreground",
+                  )}
+                  onClick={() => setSelectedPage("predict")}
+                >
+                  <Activity className="mr-2 h-4 w-4" />
+                  Predict
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  className={cn(
+                    navigationMenuTriggerStyle(),
                     selectedPage === "team" && "bg-accent text-accent-foreground",
                   )}
                   onClick={() => setSelectedPage("team")}
@@ -97,51 +93,16 @@ function GreenMatter() {
                   Team
                 </NavigationMenuLink>
               </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  className={cn(
-                    navigationMenuTriggerStyle(),
-                    selectedPage === "about" && "bg-accent text-accent-foreground",
-                  )}
-                  onClick={() => setSelectedPage("about")}
-                >
-                  <Info className="mr-2 h-4 w-4" />
-                  About
-                </NavigationMenuLink>
-              </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
         </div>
       </header>
-      <main className="flex-1 container py-6">
+      <main className="flex-1 py-6">
         {selectedPage === "viewer" ? (
           <FileManager />
         ) : selectedPage === "team" ? (
           <TeamPage />
-        ) : selectedPage === "home" ? (
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold">Welcome to Green Matter</CardTitle>
-              <CardDescription>Your sustainable materials management solution</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">Select a page from the navigation bar above to get started.</p>
-            </CardContent>
-          </Card>
-        ) : (
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold">About Green Matter</CardTitle>
-              <CardDescription>Learn more about our application</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                This is an application for managing green materials. Our platform helps you organize, track, and
-                optimize your sustainable material usage.
-              </p>
-            </CardContent>
-          </Card>
-        )}
+        ) : <><PredictPage /></>}
       </main>
     </div>
   )

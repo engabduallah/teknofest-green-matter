@@ -38,13 +38,11 @@ const teamMembers = [
 export default function TeamPage() {
     return (
         <div className="flex justify-center">
-
             <div className="container py-10">
                 <div className="space-y-4 text-center mb-10">
                     <h1 className="text-3xl font-bold tracking-tight">Our Team</h1>
                     <p className="text-muted-foreground max-w-[700px] mx-auto">
-                        Meet the experts behind Green Matter. Our diverse team combines expertise in materials science, environmental
-                        research, and software development to create innovative solutions for sustainable materials management.
+                        We are a diverse team of engineers, AI specialists, and developers with strong expertise in software development, artificial intelligence, and biomedical engineering. With backgrounds spanning full-stack development, backend engineering, AI research, and healthcare technology, we bring a unique blend of skills to tackle complex challenges.
                     </p>
                     <Separator className="my-4 mx-auto w-[100px]" />
                 </div>
