@@ -186,30 +186,41 @@ export default function PredictPage() {
                             )}
 
                             {result && (
-                                <Alert variant={result.hasStroke ? "destructive" : "default"}>
-                                    <div className="flex items-start">
-                                        {result.hasStroke ? (
-                                            <AlertCircle className="h-5 w-5 mr-2" />
-                                        ) : (
-                                            <CheckCircle className="h-5 w-5 mr-2" />
-                                        )}
-                                        <div>
-                                            <AlertTitle className="text-lg">
-                                                {result.hasStroke ? "Stroke Detected" : "No Stroke Detected"}
-                                            </AlertTitle>
-                                            <AlertDescription>
-                                                <p className="mt-1">
-                                                    Our model predicts {result.hasStroke ? "a high" : "a low"} likelihood of stroke with{" "}
-                                                    {result.confidence}% confidence.
-                                                </p>
-                                                <p className="mt-2 text-sm">
-                                                    <strong>Note:</strong> This is a demonstration only. Always consult with a medical
-                                                    professional for accurate diagnosis.
-                                                </p>
-                                            </AlertDescription>
+                                <Card
+                                    className={cn(
+                                        "border-l-4",
+                                        result.hasStroke ? "border-l-destructive bg-destructive/10" : "border-l-green-500 bg-green-500/10",
+                                    )}
+                                >
+                                    <CardContent className="p-4">
+                                        <div className="flex items-start">
+                                            {result.hasStroke ? (
+                                                <AlertCircle
+                                                    className={cn("h-5 w-5 mr-2", result.hasStroke ? "text-destructive" : "text-green-500")}
+                                                />
+                                            ) : (
+                                                <CheckCircle
+                                                    className={cn("h-5 w-5 mr-2", result.hasStroke ? "text-destructive" : "text-green-500")}
+                                                />
+                                            )}
+                                            <div>
+                                                <h3 className="text-lg font-semibold mb-1">
+                                                    {result.hasStroke ? "Stroke Detected" : "No Stroke Detected"}
+                                                </h3>
+                                                <div>
+                                                    <p className="mt-1">
+                                                        Our model predicts {result.hasStroke ? "a high" : "a low"} likelihood of stroke with{" "}
+                                                        {result.confidence}% confidence.
+                                                    </p>
+                                                    <p className="mt-2 text-sm text-muted-foreground">
+                                                        <strong>Note:</strong> This is a demonstration only. Always consult with a medical
+                                                        professional for accurate diagnosis.
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </Alert>
+                                    </CardContent>
+                                </Card>
                             )}
                         </CardContent>
                         <CardFooter className="text-sm text-muted-foreground">Analysis powered by Green Matter AI</CardFooter>
